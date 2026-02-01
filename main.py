@@ -8,7 +8,7 @@ from telegram.ext import (
 )
 import os
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("8490429007:AAEI08HnfXrgbnWUKA8VruiIOohfk8aZm6g")
 
 # movie_code : file_id
 MOVIES = {}
@@ -16,7 +16,7 @@ MOVIES = {}
 # (user_id, movie_code)
 USED = set()
 
-ADMIN_ID = 123456789  # <-- এখানে তোমার Telegram user ID বসাও
+ADMIN_ID = 7450191608  # <-- এখানে তোমার Telegram user ID বসাও
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
