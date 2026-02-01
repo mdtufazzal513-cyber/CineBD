@@ -9,7 +9,7 @@ from telegram.ext import (
 import os
 
 BOT_TOKEN = os.getenv("8490429007:AAEI08HnfXrgbnWUKA8VruiIOohfk8aZm6g")
-print("BOT_TOKEN:", BOT_TOKEN)
+print("8490429007:AAEI08HnfXrgbnWUKA8VruiIOohfk8aZm6g", BOT_TOKEN)
 # movie_code : file_id
 MOVIES = {}
 
