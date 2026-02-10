@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUFAZZAL - Personal Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* --- CORE STYLES --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        :root { 
+            --primary: #0f172a; 
+            --secondary: #6366f1; 
+            --accent: #06d6a0; 
+            --gold: #fbbf24; 
+            --gradient: linear-gradient(135deg, #6366f1, #8b5cf6, #06d6a0); 
+            --gradient-gold: linear-gradient(135deg, #fbbf24, #f59e0b); 
+        }
+        
+        body { 
+            background: #0f172a; 
+            color: #e2e8f0; 
+            line-height: 1.7; 
+            min-height: 100vh; 
+            padding: 20px; 
+            overflow-x: hidden; 
+        }
+
+        /* Fixed Background */
+        .background-layer { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: radial-gradient(circle at top right, #1e293b, #0f172a); 
+            z-index: -2; 
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; position: relative; z-index: 1; }
+
+        /* --- LOADER --- */
+        #loader { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background:#0f172a; z-index:9999; display:flex; flex-direction: column;
+            justify-content:center; align-items:center; color:white; 
+            transition: opacity 0.5s ease;
+        }
+        .spinner {
+            width: 50px; height: 50px; border: 5px solid rgba(99, 102, 241, 0.3);
+            border-top: 5px solid var(--accent); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 15px;
+        }
+
+        /* --- HEADER ANIMATIONS --- */
+        header { text-align: center; padding: 40px 0; margin-bottom: 20px; }
+        
+        .profile-img-container { 
+            width: 180px; height: 180px; margin: 0 auto 20px; position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .profile-img { 
+            width: 100%; height: 100%; border-radius: 50%; 
+            border: 4px solid transparent; 
+            background: linear-gradient(#0f172a, #0f172a) padding-box, var(--gradient) border-box; 
+            overflow: hidden; 
+            box-shadow: 0 0 50px rgba(99, 102, 241, 0.5);
+            transition: transform 0.5s;
+        }
+        
+        .profile-img:hover { transform: scale(1.05) rotate(5deg); }
+        .profile-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Typography Animations */
+        header h1 { 
+            font-size: 3em; margin-bottom: 5px; 
+            background: var(--gradient-gold); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            font-weight: 700; letter-spacing: -1px;
+            opacity: 0; animation: fadeInUp 0.8s ease forwards 0.5s;
+        }
+        
+        #disp_welcome { opacity: 0; animation: fadeInUp 0.8s ease forwards 0.7s; }
+        
+        /* Typing Effect Style */
+        .typing-container {
+            font-size: 1.1em; color: #94a3b8; font-style: italic; min-height: 30px;
+            display: inline-block;
+        }
+        .cursor { display: inline-block; width: 2px; height: 1.2em; background-color: var(--accent); animation: blink 1s infinite; vertical-align: middle; }
+
+        /* Social Icons Pop */
+        .social-menu { display: flex; justify-content: center; gap: 20px; margin-top: 25px; list-style: none; }
+        .social-link { 
+            width: 55px; height: 55px; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            color: white; font-size: 24px; text-decoration: none; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0; animation: popIn 0.5s ease forwards;
+            position: relative; overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .social-menu li:nth-child(1) .social-link { animation-delay: 1s; }
+        .social-menu li:nth-child(2) .social-link { animation-delay: 1.1s; }
+        .social-menu li:nth-child(3) .social-link { animation-delay: 1.2s; }
+        .social-menu li:nth-child(4) .social-link { animation-delay: 1.3s; }
+
+        .social-link:hover { transform: translateY(-8px) scale(1.1); box-shadow: 0 10px 25px rgba(99, 102, 241, 0.6); }
+        .social-link.facebook { background: linear-gradient(45deg, #1877f2, #0d5cb6); }
+        .social-link.whatsapp { background: linear-gradient(45deg, #25d366, #128c7e); }
+        .social-link.telegram { background: linear-gradient(45deg, #0088cc, #005c8a); }
+        .social-link.email { background: linear-gradient(45deg, #ea4335, #d14836); }
+
+        /* --- IMPROVED SLIDER STYLES --- */
+        .slider-section { margin: 60px 0; opacity: 0; transform: translateY(50px); transition: 1s ease; }
+        .slider-section.show { opacity: 1; transform: translateY(0); }
+        
+        .slider-wrapper { 
+            position: relative; 
+            width: 100%; 
+            overflow-x: auto; /* Allow scrolling */
+            padding-bottom: 10px;
+            cursor: grab; /* Shows hand icon */
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Hide scrollbar for Chrome/Safari/Webkit */
+        .slider-wrapper::-webkit-scrollbar { display: none; }
+        .slider-wrapper:active { cursor: grabbing; }
+
+        .slider-track { 
+            display: flex; 
+            gap: 20px; 
+            width: max-content; 
+            padding: 0 20px; 
+        }
+        
+        .slide-item { 
+            width: 180px; 
+            height: 260px; 
+            border-radius: 15px; 
+            overflow: hidden; 
+            position: relative; 
+            flex-shrink: 0; 
+            border: 2px solid rgba(255,255,255,0.1); 
+            transition: 0.4s ease; 
+            cursor: pointer;
+            filter: none; /* Colorful */
+            user-select: none; 
+        }
+        
+        .slide-item:hover { 
+            transform: scale(1.05); 
+            border-color: var(--accent); 
+            z-index: 10; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+        .slide-item img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            pointer-events: none; 
+        }
+
+        /* --- INFO SECTION --- */
+        .clean-section { margin-bottom: 50px; }
+        .section-title { 
+            font-size: 2em; color: white; margin-bottom: 30px; display: inline-block; 
+            border-bottom: 3px solid var(--secondary);
+            opacity: 0; transform: translateX(-50px); transition: 0.8s ease;
+        }
+        .section-title.show { opacity: 1; transform: translateX(0); }
+
+        .info-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        
+        .info-group { opacity: 0; transform: translateY(30px); transition: 0.8s ease; }
+        .info-group.show { opacity: 1; transform: translateY(0); }
+        
+        .info-item { 
+            display: flex; align-items: center; padding: 15px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05); color: #cbd5e1; 
+            background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 10px;
+            transition: 0.3s; cursor: default;
+        }
+        .info-item:hover { background: rgba(255,255,255,0.05); padding-left: 20px; border-left: 3px solid var(--accent); }
+        
+        .info-item i { 
+            width: 40px; height: 40px; background: rgba(99, 102, 241, 0.1); 
+            color: var(--accent); border-radius: 10px; display: flex; 
+            align-items: center; justify-content: center; margin-right: 15px; 
+            font-size: 1.2em; transition: 0.3s;
+        }
+        .info-item:hover i { transform: rotate(360deg); background: var(--accent); color: #0f172a; }
+
+        /* --- ANIMATIONS KEYFRAMES --- */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes popIn { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        
+        /* Particle Background */
+        .particle {
+            position: absolute; background: rgba(99, 102, 241, 0.4);
+            border-radius: 50%; pointer-events: none;
+            animation: moveUp 20s linear infinite;
+        }
+        @keyframes moveUp { from { transform: translateY(100vh) scale(0); opacity: 0; } 50% { opacity: 0.6; } to { transform: translateY(-10vh) scale(1.5); opacity: 0; } }
+
+        /* Scroll Button */
+        .scroll-btn { 
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; 
+            background: var(--gradient); border-radius: 50%; display: flex; 
+            align-items: center; justify-content: center; color: white; cursor: pointer; 
+            opacity: 0; transition: 0.4s; z-index: 100; transform: scale(0);
+            box-shadow: 0 0 20px var(--secondary);
+        }
+        .scroll-btn.show { opacity: 1; transform: scale(1); }
+        .scroll-btn:hover { transform: scale(1.1) translateY(-5px); }
+
+        @media (max-width: 768px) { .info-grid { grid-template-columns: 1fr; } header h1 { font-size: 2.2em; } }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading Profile...</p>
+    </div>
+
+    <div class="background-layer"></div>
+    <div id="particles"></div>
+    
+    <div class="container">
+        <!-- HEADER -->
+        <header id="header">
+            <div class="profile-img-container">
+                <div class="profile-img" id="profileImage"></div>
+            </div>
+            <h1 id="disp_name">TUFAZZAL⚡</h1>
+            <p id="disp_welcome" style="color:var(--accent); font-size:1.2em; font-weight:500;">WELCOME...</p>
+            
+            <!-- Typing Effect Container -->
+            <div class="typing-container">
+                <span id="typewriter-text"></span><span class="cursor"></span>
+            </div>
+            
+            <ul class="social-menu">
+                <li><a id="link_fb" href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a></li>
+                <li><a id="link_wa" href="#" class="social-link whatsapp"><i class="fab fa-whatsapp"></i></a></li>
+                <li><a id="link_tg" href="#" class="social-link telegram"><i class="fab fa-telegram-plane"></i></a></li>
+                <li><a id="link_email" href="#" class="social-link email"><i class="fas fa-envelope"></i></a></li>
+            </ul>
+        </header>
+
+        <!-- SLIDER -->
+        <section class="slider-section reveal-on-scroll">
+            <div class="slider-wrapper" id="sliderWrapper">
+                <div class="slider-track" id="sliderTrack">
+                    <!-- Images will load here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="clean-section">
+            <h2 class="section-title reveal-on-scroll">About Me</h2>
+            <div class="info-grid">
+                <div class="info-group reveal-on-scroll">
+                    <div class="info-item"><i class="fas fa-signature"></i> <span id="disp_name2">...</span></div>
+                    <div class="info-item"><i class="fas fa-user-graduate"></i> <span id="disp_prof">...</span></div>
+                    <div class="info-item"><i class="fas fa-mosque"></i> <span id="disp_rel">...</span></div>
+                    <div class="info-item"><i class="fas fa-city"></i> <span id="disp_city">...</span></div>
+                </div>
+
+                <div class="info-group reveal-on-scroll" style="transition-delay: 0.2s;">
+                    <div class="info-item"><i class="fas fa-envelope"></i> <span id="disp_email_txt">...</span></div>
+                    <div class="info-item"><i class="fas fa-phone"></i> <span id="disp_phone">...</span></div>
+                    <div class="info-item"><i class="fas fa-code"></i> <span>Web Development</span></div>
+                    <div class="info-item"><i class="fas fa-gamepad"></i> <span>Gaming & Tech</span></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="reveal-on-scroll" style="text-align:center; padding:30px; color:#64748b; border-top:1px solid rgba(255,255,255,0.1); margin-top: 50px;">
+            <p>&copy;2026.Powered by TUFAZZAL ISLAM 🙃</p>
+        </footer>
+    </div>
+
+    <div class="scroll-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fas fa-arrow-up"></i></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCNYDihsP7ZDiJvcfLXpoR7txkjkEMK3Xw",
+            authDomain: "my-profile-513.firebaseapp.com",
+            databaseURL: "https://my-profile-513-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "my-profile-513",
+            storageBucket: "my-profile-513.firebasestorage.app",
+            messagingSenderId: "835293490532",
+            appId: "1:835293490532:web:270056923f649ba0395e71"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Fetch Data Realtime
+        onValue(ref(db), (snapshot) => {
+            const data = snapshot.val();
+            if(!data) return;
+
+            // Fade Out Loader
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 500);
+
+            // 1. Header
+            if(data.header) {
+                document.getElementById('disp_name').innerText = data.header.name || 'TUFAZZAL⚡';
+                document.getElementById('disp_name2').innerText = 'Name: ' + (data.header.name || '');
+                document.getElementById('disp_welcome').innerText = data.header.welcome || 'WELCOME...';
+                
+                // Typing Effect Logic
+                const tagline = data.header.tagline || "Simple • Creative • Developer";
+                typeWriter(tagline);
+
+                const imgHTML = data.header.img ? `<img src="${data.header.img}" alt="Profile">` : '<i class="fas fa-user" style="font-size:80px;color:white;"></i>';
+                document.getElementById('profileImage').innerHTML = imgHTML;
+            }
+
+            // 2. Social
+            if(data.social) {
+                document.getElementById('link_fb').href = data.social.fb || '#';
+                document.getElementById('link_wa').href = data.social.wa || '#';
+                document.getElementById('link_tg').href = data.social.tg || '#';
+                document.getElementById('link_email').href = data.social.email ? 'mailto:'+data.social.email : '#';
+                document.getElementById('disp_email_txt').innerText = data.social.email || '...';
+            }
+
+            // 3. About
+            if(data.about) {
+                document.getElementById('disp_prof').innerText = 'Profession: ' + (data.about.profession || '');
+                document.getElementById('disp_rel').innerText = 'Religion: ' + (data.about.religion || '');
+                document.getElementById('disp_city').innerText = 'City: ' + (data.about.city || '');
+                document.getElementById('disp_phone').innerText = data.about.phone || '';
+            }
+
+            // 4. Slider (With Duplication for Seamless Loop)
+            if(data.slider && Array.isArray(data.slider)) {
+                const track = document.getElementById('sliderTrack');
+                let html = '';
+                // Duplicate images for seamless looping
+                const loopData = [...data.slider, ...data.slider]; 
+                loopData.forEach(url => {
+                    html += `<div class="slide-item"><img src="${url}" alt="Gallery" draggable="false"></div>`;
+                });
+                track.innerHTML = html;
+                
+                // Start the auto-scrolling logic after images load
+                startAutoScroll();
+            }
+
+            setupScrollAnimation();
+        });
+
+        // --- Typing Effect Function ---
+        function typeWriter(text) {
+            const element = document.getElementById('typewriter-text');
+            element.innerText = "";
+            let i = 0;
+            function type() {
+                if (i < text.length) {
+                    element.innerText += text.charAt(i);
+                    i++;
+                    setTimeout(type, 100);
+                }
+            }
+            type();
+        }
+
+        // --- Scroll Reveal Animation ---
+        function setupScrollAnimation() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    }
+                });
+            }, { threshold: 0.15 });
+
+            document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        }
+
+        // --- Particles System ---
+        const particlesContainer = document.getElementById('particles');
+        for(let i=0; i<20; i++) {
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            const size = Math.random() * 8 + 3;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.animationDelay = Math.random() * 5 + 's';
+            p.style.animationDuration = Math.random() * 10 + 10 + 's';
+            particlesContainer.appendChild(p);
+        }
+
+        window.onscroll = () => {
+            const btn = document.querySelector('.scroll-btn');
+            if(window.scrollY > 300) btn.classList.add('show'); else btn.classList.remove('show');
+        };
+
+        // --- AUTO SCROLL & DRAG LOGIC ---
+        const slider = document.getElementById('sliderWrapper');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+        let animationId;
+        
+        // Auto Scroll Function
+        function startAutoScroll() {
+            // Cancel any existing loop to avoid double-speed
+            cancelAnimationFrame(animationId);
+            
+            function step() {
+                if(!isDown) {
+                    slider.scrollLeft += 0.8; // Auto Speed (0.8px per frame)
+                    
+                    // Seamless Loop Logic
+                    // If we have scrolled past half the width (the first set of images)
+                    if(slider.scrollLeft >= (slider.scrollWidth / 2)) {
+                        slider.scrollLeft = 0; // Snap back to start instantly
+                    }
+                }
+                animationId = requestAnimationFrame(step);
+            }
+            step();
+        }
+
+        // --- Drag Events ---
+
+        // Mouse Down
+        slider.addEventListener('mousedown', (e) => {
+            isDown = true;
+            slider.classList.add('active');
+            startX = e.pageX - slider.offsetLeft;
+            scrollLeft = slider.scrollLeft;
+            cancelAnimationFrame(animationId); // Stop auto scroll while dragging
+        });
+
+        // Mouse Leave
+        slider.addEventListener('mouseleave', () => {
+            isDown = false;
+            slider.classList.remove('active');
+            startAutoScroll(); // Resume auto scroll
+        });
+
+        // Mouse Up
+        slider.addEventListener('mouseup', () => {
+            isDown = false;
+            slider.classList.remove('active');
+            startAutoScroll(); // Resume auto scroll
+        });
+
+        // Mouse Move
+        slider.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - slider.offsetLeft;
+            const walk = (x - startX) * 2;
+            slider.scrollLeft = scrollLeft - walk;
+        });
+
+        // Touch Events (Mobile)
+        slider.addEventListener('touchstart', () => {
+            isDown = true;
+            cancelAnimationFrame(animationId); // Stop auto scroll on touch
+        }, {passive: true});
+
+        slider.addEventListener('touchend', () => {
+            isDown = false;
+            setTimeout(startAutoScroll, 500); // Resume after short delay
+        });
+
+    </script>
+</body>
+</html>
